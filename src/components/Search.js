@@ -1,84 +1,87 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import debounce from 'lodash/debounce'
-import AutoComplete from 'material-ui/AutoComplete';
-import {Card} from 'material-ui/Card';
+import {Container, Search} from 'semantic-ui-react'
 
 const apiKey = '68b4fe2a513155a58dd0af4adacb281b';
 const url  = `https://api.themoviedb.org/3/search/movie`;
 
-const dataSourceConfig = {
-    text: 'title',
-    value: 'id',
-};
+class SearchComponent extends Component {
+  constructor(props) {
+    super(props);
 
-class Search extends Component {
-    constructor(props) {
-        super(props);
+    this.state = {
+      isLoading: false,
+      results: [],
+      query: ''
+    };
 
-        this.state = {
-            results : [],
-            query : ''
-        };
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleResultSelect = this.handleResultSelect.bind(this);
+    this.searchMovies = debounce(this.searchMovies.bind(this), 500);
+  }
 
-        this.onNewRequest  = this.onNewRequest.bind(this);
-        this.onUpdateInput = this.onUpdateInput.bind(this);
-        this.searchMovies = debounce(this.searchMovies.bind(this), 500);
-    }
+  handleResultSelect(e, { result }){
+    this.setState({
+      query: result.title
+    });
+  }
 
-    onNewRequest(query) {
-        this.setState({
-            query: query,
-        });
-    }
+  handleSearchChange(e, { value }) {
+    this.setState({
+      isLoading: true,
+      query: value
+    });
 
-    onUpdateInput(query) {
-        this.setState({
-            query: query,
-        });
-        this.searchMovies();
-    }
+    this.searchMovies();
+  }
 
-    searchMovies() {
-        if (this.state.query !== '') {
-            axios.get(url, {
-                    params: {
-                        api_key: apiKey,
-                        language: 'pl',
-                        query: this.state.query
-                    }
-                })
-                .then(response => {
-                    this.setState({
-                        results: response.data.results
-                    });
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+  searchMovies() {
+    if (this.state.query !== '') {
+      axios.get(url, {
+        params: {
+          api_key: apiKey,
+          language: 'pl',
+          query: this.state.query
         }
+      })
+        .then(response => {
+          this.setState({
+            isLoading: false,
+            results: response.data.results
+          });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    } else {
+      this.setState({
+        isLoading: false
+      });
     }
+  }
 
-    render() {
-        return (
-            <div>
-                <Card
-                    style={{padding: '1rem'}}>
-                        <AutoComplete
-                            hintText='czego szukasz?'
-                            dataSource={this.state.results}
-                            dataSourceConfig={dataSourceConfig}
-                            filter={AutoComplete.noFilter}
-                            onNewRequest  ={this.onNewRequest}
-                            onUpdateInput ={this.onUpdateInput}
-                            floatingLabelText='Szukaj'
-                            fullWidth={true}
-                        />
-                </Card>
+  render() {
+    const { isLoading, value, results } = this.state;
 
-            </div>
-        );
+    return (
+      <Container>
+            <Search
+              fluid
+              input={{
+                fluid: true
+              }}
+              loading={isLoading}
+              onResultSelect={this.handleResultSelect}
+              onSearchChange={this.handleSearchChange}
+              results={results}
+              showNoResults={false}
+              value={value}
+              {...this.props}
+            />
+      </Container>
+    );
     }
 }
 
-export default Search;
+export default SearchComponent;

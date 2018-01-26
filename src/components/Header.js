@@ -1,11 +1,10 @@
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
+import { Menu } from 'semantic-ui-react'
 
 const Header = () => (
-    <AppBar
-        title="Allegro MovieDB"
-        showMenuIconButton={false}
-    />
+    <Menu borderless color={'orange'} inverted stackable>
+      <Menu.Item header>Allegro MovieDB</Menu.Item>
+    </Menu>
 );
 
 export default Header;
