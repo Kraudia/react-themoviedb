@@ -1,9 +1,10 @@
 import React from 'react';
-import { Menu } from 'semantic-ui-react'
+import { Link } from 'react-router-dom';
+import { Menu } from 'semantic-ui-react';
 
 const Header = () => (
     <Menu borderless color={'green'} inverted stackable>
-      <Menu.Item header>Allegro</Menu.Item>
+      <Menu.Item header ><Link to={'/'}>Allegro</Link></Menu.Item>
     </Menu>
 );
 

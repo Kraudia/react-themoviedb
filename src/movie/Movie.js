@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Movie extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      id: this.props.match.params
+    }
+  }
+
   render() {
     return (
       <div>
@@ -15,7 +22,7 @@ class Movie extends Component {
 Movie.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.number
+      id: PropTypes.string
     })
   })
 };

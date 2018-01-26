@@ -1,11 +1,32 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { Grid, Image, Search } from 'semantic-ui-react';
+
 import axios from 'axios';
 import debounce from 'lodash/debounce'
-import { Grid, Image, Search } from 'semantic-ui-react'
 
 const apiKey = '68b4fe2a513155a58dd0af4adacb281b';
 const url  = `https://api.themoviedb.org/3/search/movie`;
 const tmdb = 'https://www.themoviedb.org/static_cache/v4/logos/408x161-powered-by-rectangle-blue-10d3d41d2a0af9ebcb85f7fb62ffb6671c15ae8ea9bc82a2c6941f223143409e.png';
+
+const resultRenderer = ({ image, price, title, description, movie }) => <Link to={'/movie/' + movie}>
+  {image && <div key='image' className='image'><Image src={image} rounded/></div>}
+    <div key='content' className='content'>
+      {price && <div className='price'>{price}</div>}
+      {title && <div className='title'>{title}</div>}
+      {description && <div className='description'>{description}</div>}
+    </div>
+  </Link>
+;
+
+resultRenderer.propTypes = {
+  movie: PropTypes.string,
+  image: PropTypes.string,
+  price: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string
+};
 
 class SearchBar extends Component {
   constructor(props) {
@@ -33,7 +54,6 @@ class SearchBar extends Component {
       isLoading: true,
       query: value
     });
-
     this.searchMovies();
   }
 
@@ -50,6 +70,7 @@ class SearchBar extends Component {
           this.setState({
             isLoading: false,
             results: response.data.results.map((item) => ({
+              movie: item.id,
               title: item.title,
               description: item.original_title,
               image: item.poster_path ? 'https://image.tmdb.org/t/p/w92' + item.poster_path : 'https://dummyimage.com/92x134/d8d8d8/fafafa.png&text=x',
@@ -71,7 +92,7 @@ class SearchBar extends Component {
     const { isLoading, value, results } = this.state;
 
     return (
-      <Grid container equal columns={'equal'}>
+      <Grid container columns={'equal'}>
         <Grid.Column width={2} only={'tablet computer'}>
           <Image src={tmdb} size={'medium'} centered/>
         </Grid.Column>
@@ -84,6 +105,7 @@ class SearchBar extends Component {
             loading={isLoading}
             onResultSelect={this.handleResultSelect}
             onSearchChange={this.handleSearchChange}
+            resultRenderer={resultRenderer}
             results={results}
             showNoResults={false}
             value={value}

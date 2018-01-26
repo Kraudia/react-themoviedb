@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from "./Header";
 import Search from "./Search";
@@ -8,14 +8,18 @@ import Home from "../home/Home";
 
 class App extends Component {
   render() {
+
     return (
       <div>
-        <Header/>
-        <Search/>
         <Router>
-          <div className="container">
-            <Route exact path="/" component={Home} />
-            <Route path="/movie/:id?" component={Movie} />
+          <div>
+            <Header/>
+            <Search/>
+            <Switch>
+              <Route exact path="/" component={Home}/>
+              <Route path="/movie/:id" component={Movie}/>
+              <Route component={Home}/>
+            </Switch>
           </div>
         </Router>
       </div>
