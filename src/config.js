@@ -1,7 +1,8 @@
 const config = {
   apiUrl: {
     search: `https://api.themoviedb.org/3/search/movie`,
-    movie: `https://api.themoviedb.org/3/movie`
+    movie: `https://api.themoviedb.org/3/movie`,
+    popular: `https://api.themoviedb.org/3/movie/popular`
   },
   apiKey: '68b4fe2a513155a58dd0af4adacb281b',
   language: 'pl'
