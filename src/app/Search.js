@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Grid, Image, Search } from 'semantic-ui-react';
-
 import axios from 'axios';
 import debounce from 'lodash/debounce'
 
-const apiKey = '68b4fe2a513155a58dd0af4adacb281b';
-const url  = `https://api.themoviedb.org/3/search/movie`;
-const tmdb = 'https://www.themoviedb.org/static_cache/v4/logos/408x161-powered-by-rectangle-blue-10d3d41d2a0af9ebcb85f7fb62ffb6671c15ae8ea9bc82a2c6941f223143409e.png';
+import config, { tmdb } from '../config';
 
 const resultRenderer = ({ image, price, title, description, movie }) => <Link to={'/movie/' + movie}>
   {image && <div key='image' className='image'><Image src={image} rounded/></div>}
@@ -40,6 +37,7 @@ class SearchBar extends Component {
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleResultSelect = this.handleResultSelect.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.searchMovies = debounce(this.searchMovies.bind(this), 500);
   }
 
@@ -52,17 +50,25 @@ class SearchBar extends Component {
   handleSearchChange(e, { value }) {
     this.setState({
       isLoading: true,
+      results: [],
       query: value
     });
     this.searchMovies();
   }
 
+  handleSubmit(e) {
+    if (e.key === 'Enter') {
+      this.context.router.history.push('/movie/' + this.state.query);
+      e.preventDefault();
+    }
+  }
+
   searchMovies() {
-    if (this.state.query !== '') {
-      axios.get(url, {
+    if (this.state.query) {
+      axios.get(config.apiUrl.search, {
         params: {
-          api_key: apiKey,
-          language: 'pl',
+          api_key: config.apiKey,
+          language: config.language,
           query: this.state.query
         }
       })
@@ -97,24 +103,32 @@ class SearchBar extends Component {
           <Image src={tmdb} size={'medium'} centered/>
         </Grid.Column>
         <Grid.Column>
-          <Search
-            fluid
-            input={{
-              fluid: true
-            }}
-            loading={isLoading}
-            onResultSelect={this.handleResultSelect}
-            onSearchChange={this.handleSearchChange}
-            resultRenderer={resultRenderer}
-            results={results}
-            showNoResults={false}
-            value={value}
-            {...this.props}
-          />
+          <form onKeyPress={this.handleSubmit}>
+            <Search
+
+              fluid
+              input={{
+                fluid: true
+              }}
+              loading={isLoading}
+              onResultSelect={this.handleResultSelect}
+              onSearchChange={this.handleSearchChange}
+              resultRenderer={resultRenderer}
+              results={results}
+              showNoResults={false}
+              value={value}
+              size={'big'}
+              {...this.props}
+            />
+          </form>
         </Grid.Column>
       </Grid>
     );
   }
 }
+
+SearchBar.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 
 export default SearchBar;
