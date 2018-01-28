@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Loader, Segment } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Loader, Segment } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios/index';
 
@@ -13,10 +13,13 @@ class Home extends Component {
       isLoading: true,
       results: null,
       page: 0,
-      total_pages: 1
+      total_pages: 1,
+      sort: 1
     };
     this.getPopularMovies = this.getPopularMovies.bind(this);
     this.getMorePopularMovies = this.getMorePopularMovies.bind(this);
+    this.sortByTitle = this.sortByTitle.bind(this);
+    this.sortByPopularity = this.sortByPopularity.bind(this);
   }
 
   componentDidMount(){
@@ -51,8 +54,9 @@ class Home extends Component {
         }
       })
         .then( response => {
+          let results = this.state.results.concat(response.data.results);
           this.setState({
-            results: this.state.results.concat(response.data.results),
+            results: results,
             page: response.data.page,
             total_results: response.data.total_results,
             total_pages: response.data.total_pages
@@ -60,6 +64,43 @@ class Home extends Component {
         });
     }
   }
+
+  sortByTitle() {
+    if (this.state.results && this.state.results.length > 0) {
+      if (this.state.sort === 1) {
+        let results = this.state.results.reverse();
+        this.setState({
+          results: results,
+          sort: -1
+        });
+      } else {
+        let results = this.state.results.sort((a, b) => a.title.localeCompare(b.title, {sensitivity: 'base'}));
+        this.setState({
+          results: results,
+          sort: 1
+        });
+      }
+    }
+  }
+
+  sortByPopularity() {
+    if (this.state.results && this.state.results.length > 0) {
+      if (this.state.sort === 2) {
+        let results = this.state.results.reverse();
+        this.setState({
+          results: results,
+          sort: -2
+        });
+      } else {
+        let results = this.state.results.sort((a, b) => (a.popularity < b.popularity) ? -1 : ((a.popularity > b.popularity) ? 1 : 0));
+        this.setState({
+          results: results,
+          sort: 2
+        });
+      }
+    }
+  }
+
 
   render() {
       return (
@@ -74,10 +115,25 @@ class Home extends Component {
             </p>
           }>
         <Container fluid>
-          <Segment basic padded loading={this.state.isLoading}>
-            <Header as='h2' color='green'>Popularne filmy</Header>
+          <Segment basic>
+            <Grid columns='equal'>
+              <Grid.Column verticalAlign='bottom'>
+                <Header as='h2' color='green'>Popularne filmy</Header>
+              </Grid.Column>
+              <Grid.Column textAlign='right' verticalAlign='bottom'>
+                <Header sub>Sortuj</Header>
+                <Button icon labelPosition='left' onClick={this.sortByTitle}>
+                  <Icon name='font'/> Tytuł
+                </Button>
+                <Button icon labelPosition='left' onClick={this.sortByPopularity}>
+                  <Icon name='star'/> Popularność
+                </Button>
+              </Grid.Column>
+            </Grid>
+          </Segment>
 
-              <List results={this.state.results}/>
+          <Segment basic loading={this.state.isLoading}>
+            <List results={this.state.results}/>
           </Segment>
         </Container>
         </InfiniteScroll>
