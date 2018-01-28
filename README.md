@@ -38,4 +38,4 @@ Projekt jest dostępny na `http://localhost:3000/`. Po każdej zmianie w kodzie 
 ### Użyte technologie i narzędzia
 
 * [React](https://reactjs.org/) - framework oparty wspomagający tworzenie i rozwój aplikacji internetowych
-* [React Bootstrap with Material Design](https://www.npmjs.com/package/mdbreact) -  zestaw gotowych fragmentów kodu do tworzenia responsywnych stron internetowych
+* [Semantic UI React](https://react.semantic-ui.com/) -  zestaw gotowych fragmentów kodu do tworzenia responsywnych stron internetowych
