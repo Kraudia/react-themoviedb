@@ -39,3 +39,6 @@ Projekt jest dostępny na `http://localhost:3000/`. Po każdej zmianie w kodzie 
 
 * [React](https://reactjs.org/) - framework oparty wspomagający tworzenie i rozwój aplikacji internetowych
 * [Semantic UI React](https://react.semantic-ui.com/) -  zestaw gotowych fragmentów kodu do tworzenia responsywnych stron internetowych
+
+### Demo
+Działająca wersja jest dostępna także na [kraudia.github.io/react-themoviedb](https://kraudia.github.io/react-themoviedb/)
