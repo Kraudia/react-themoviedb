@@ -58,7 +58,7 @@ class SearchBar extends Component {
 
   handleSubmit(e) {
     if (e.key === 'Enter') {
-      this.context.router.history.push('/movie/' + this.state.query);
+      this.context.router.history.push('/search/' + this.state.query);
       e.preventDefault();
     }
   }

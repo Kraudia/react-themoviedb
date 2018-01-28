@@ -1,34 +1,53 @@
 import React, { Component } from 'react';
-import { Button, Container, Grid, Header, Icon, Loader, Segment } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Breadcrumb, Button, Container, Grid, Header, Icon, Loader, Segment } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import PropTypes from 'prop-types';
 import axios from 'axios/index';
 
 import config from '../config';
 import List from '../shared/list/List';
 
-class Home extends Component {
+class Search extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      query: this.props.match.params.query,
       isLoading: true,
       results: null,
       page: 0,
       total_pages: 1,
       sort: 1
     };
-    this.getPopularMovies = this.getPopularMovies.bind(this);
-    this.getMorePopularMovies = this.getMorePopularMovies.bind(this);
+    this.getResults = this.getResults.bind(this);
+    this.getMoreResults = this.getMoreResults.bind(this);
     this.sortByTitle = this.sortByTitle.bind(this);
     this.sortByPopularity = this.sortByPopularity.bind(this);
   }
 
   componentDidMount(){
-    this.getPopularMovies();
+    if (this.state.query) {
+      this.getResults();
+    }
   }
 
-  getPopularMovies() {
-    axios.get(config.apiUrl.popular, {
+  componentWillReceiveProps(nextProps) {
+    if(this.props.match.params.query !== nextProps.match.params.query) {
+      this.setState({
+        query: nextProps.match.params.query,
+        isLoading: true,
+        results: null,
+        page: 0,
+        total_pages: 1,
+        sort: 1
+      }, () => this.getResults());
+    }
+  }
+
+  getResults() {
+    axios.get(config.apiUrl.search, {
       params: {
+        query: this.state.query,
         api_key: config.apiKey,
         language: config.language
       }
@@ -44,10 +63,11 @@ class Home extends Component {
       });
   }
 
-  getMorePopularMovies() {
+  getMoreResults() {
     if (this.state.page < this.state.total_pages) {
-      axios.get(config.apiUrl.popular, {
+      axios.get(config.apiUrl.search, {
         params: {
+          query: this.props.match.params.query,
           api_key: config.apiKey,
           language: config.language,
           page: this.state.page + 1
@@ -106,19 +126,19 @@ class Home extends Component {
       return (
         <InfiniteScroll
           pageStart={0}
-          next={this.getMorePopularMovies}
+          next={this.getMoreResults}
           hasMore={true}
           loader={<Loader />}
-          endMessage={
-            <p style={{textAlign: 'center'}}>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }>
+        >
         <Container fluid>
           <Segment basic>
             <Grid columns='equal'>
               <Grid.Column verticalAlign='bottom'>
-                <Header as='h2' color='green'>Popularne filmy</Header>
+                <Breadcrumb size='big'>
+                  <Breadcrumb.Section link><Link to={'/'}>Strona główna</Link></Breadcrumb.Section>
+                  <Breadcrumb.Divider icon='right angle' />
+                  <Breadcrumb.Section active>Wyniki wyszukiwań dla: <i>{this.props.match.params.query}</i> </Breadcrumb.Section>
+                </Breadcrumb>
               </Grid.Column>
               <Grid.Column textAlign='right' verticalAlign='bottom'>
                 <Header sub>Sortuj</Header>
@@ -141,4 +161,13 @@ class Home extends Component {
   }
 }
 
-export default Home;
+Search.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      query: PropTypes.string
+    })
+  })
+};
+
+
+export default Search;

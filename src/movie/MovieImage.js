@@ -8,7 +8,7 @@ class MovieImage extends Component  {
     const dummy = 'https://dummyimage.com/500x730/d8d8d8/fafafa.png&text=x';
 
     return (
-      <Image src={this.props.poster_path ? url + this.props.poster_path : dummy} />
+      <Image centered fluid src={this.props.poster_path ? url + this.props.poster_path : dummy} />
     );
   }
 }

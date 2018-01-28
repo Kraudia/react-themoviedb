@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, List } from 'semantic-ui-react';
 import ListItemImage from './ListItemImage';
-import { BASE_NAME } from '../config';
+import { BASE_NAME } from '../../config';
 
 class ListItem extends Component {
   render() {

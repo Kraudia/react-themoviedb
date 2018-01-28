@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Flag, Header, Icon, Label, List, Segment, Statistic } from 'semantic-ui-react';
 
-
-
 class MovieDetails extends Component {
   render() {
     return (
@@ -56,7 +54,7 @@ class MovieDetails extends Component {
             <Label as='a' color='yellow' href={'http://www.imdb.com/title/' + this.props.details.imdb_id}>IMDb</Label> : <div>Brak informacji.</div>}
         </Segment>
 
-        <Segment.Group horizontal>
+        <Segment.Group horizontal style={{backgroundColor: 'white'}}>
           <Segment textAlign={'center'}>
             <Statistic size='tiny' color='red'>
               <Statistic.Value>{this.props.details.vote_average}</Statistic.Value>

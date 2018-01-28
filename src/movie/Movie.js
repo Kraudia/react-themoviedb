@@ -57,7 +57,7 @@ class Movie extends Component {
         <Segment basic loading={this.state.isLoading}>
           <Grid columns='equal' padded>
             <Grid.Row>
-              <Grid.Column width={6}>
+              <Grid.Column mobile={16} tablet={5} computer={5} largeScreen={5} widescreen={4}>
                 <MovieImage poster_path={this.state.details.poster_path}/>
               </Grid.Column>
               <Grid.Column>
