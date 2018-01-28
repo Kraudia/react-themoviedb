@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, Button, Container, Grid, Header, Icon, Loader, Segment } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Loader, Segment } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PropTypes from 'prop-types';
 import axios from 'axios/index';
@@ -134,11 +133,15 @@ class Search extends Component {
           <Segment basic>
             <Grid columns='equal'>
               <Grid.Column verticalAlign='bottom'>
-                <Breadcrumb size='big'>
-                  <Breadcrumb.Section link><Link to={'/'}>Strona główna</Link></Breadcrumb.Section>
-                  <Breadcrumb.Divider icon='right angle' />
-                  <Breadcrumb.Section active>Wyniki wyszukiwań dla: <i>{this.props.match.params.query}</i> </Breadcrumb.Section>
-                </Breadcrumb>
+                <Header as='h2' color='green'>
+                  <Icon name='search' />
+                  <Header.Content>
+                    Szukasz <i>{this.props.match.params.query}</i>
+                    <Header.Subheader>
+                      {this.state.total_results} wyników wyszukiwań
+                    </Header.Subheader>
+                  </Header.Content>
+                </Header>
               </Grid.Column>
               <Grid.Column textAlign='right' verticalAlign='bottom'>
                 <Header sub>Sortuj</Header>

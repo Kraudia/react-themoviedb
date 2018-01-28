@@ -20,36 +20,36 @@ class MovieDetails extends Component {
 
         <Segment>
           <Header as='h3'>Opis</Header>
-          {this.props.details.overview || <i>Brak opisu</i>}
+          {this.props.details.overview || <i>Brak opisu.</i>}
         </Segment>
 
         <Segment>
           <Header as='h3'>Gatunki</Header>
-          {this.props.details.genres && this.props.details.genres.map(genre => <Label key={genre.id} color='green'> {genre.name} </Label>)}
+          {(this.props.details.genres && this.props.details.genres.map(genre => <Label key={genre.id} color='green'> {genre.name} </Label>)) || <i>Brak informacji.</i>}
         </Segment>
 
         <Segment>
           <Header as='h3'>Kraj produkcji</Header>
           <List horizontal divided>
-            {this.props.details.production_countries && this.props.details.production_countries.map(country =>
+            {(this.props.details.production_countries && this.props.details.production_countries.map(country =>
               <List.Item key={country.iso_3166_1}>
                 <List.Content><Flag name={country.iso_3166_1.toLowerCase()} /> {country.name}</List.Content>
-              </List.Item>)}
+              </List.Item>)) || <i>Brak informacji.</i>}
           </List>
         </Segment>
 
         <Segment>
           <Header as='h3'>Firmy produkcyjne</Header>
           <List horizontal divided>
-            {this.props.details.production_companies && this.props.details.production_companies.map(company =>
+            {(this.props.details.production_companies && this.props.details.production_companies.map(company =>
               <List.Item key={company.id}>
                 {company.name}
-              </List.Item>)}
+              </List.Item>)) || <i>Brak informacji.</i>}
           </List>
         </Segment>
 
         <Segment>
-          <Header as='h3'>Dodatkowe informacje</Header>
+          <Header as='h3'>Internet Movie Database</Header>
           {this.props.details.imdb_id ?
             <Label as='a' color='yellow' href={'http://www.imdb.com/title/' + this.props.details.imdb_id}>IMDb</Label> : <div>Brak informacji.</div>}
         </Segment>

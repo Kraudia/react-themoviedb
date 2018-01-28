@@ -105,7 +105,6 @@ class SearchBar extends Component {
         <Grid.Column>
           <form onKeyPress={this.handleSubmit}>
             <Search
-
               fluid
               input={{
                 fluid: true
