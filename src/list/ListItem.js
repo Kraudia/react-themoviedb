@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Grid, List } from 'semantic-ui-react';
 import ListItemImage from './ListItemImage';
+import { BASE_NAME } from '../config';
 
 class ListItem extends Component {
   render() {
     return (
       <Grid.Column>
-        <Card href={'/movie/' + this.props.info.id} color='green'>
+        <Card href={BASE_NAME + '/movie/' + this.props.info.id} color='green'>
           <ListItemImage poster_path={this.props.info.poster_path}/>
           <Card.Content>
             <Card.Header>

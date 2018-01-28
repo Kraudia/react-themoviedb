@@ -55,7 +55,7 @@ class Movie extends Component {
     return (
       <Container>
         <Segment basic loading={this.state.isLoading}>
-          <Grid columns='equal' padded celled='internally'>
+          <Grid columns='equal' padded>
             <Grid.Row>
               <Grid.Column width={6}>
                 <MovieImage poster_path={this.state.details.poster_path}/>
